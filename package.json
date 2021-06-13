@@ -1,0 +1,15 @@
+{
+  "name": "trixi",
+  "author": "Jackson Roberts <jackson@holopanio.com>",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "repository": "https://github.com/duxcore/trixi.git",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@types/node": "^15.12.2",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "@types/websocket": "^1.0.2"
+  }
+}
