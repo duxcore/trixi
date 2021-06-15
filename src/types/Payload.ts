@@ -3,8 +3,38 @@ export interface RawPayloadObject {
   meta: RawPayloadMeta
 }
 
+export enum PayloadType {
+  Event = "type:event",
+  Message = "type:message",
+  MessageResponse = "type:message_response",
+  AssertedMessage = "type:asserted_message",
+}
+
+interface PayloadManagerBase {
+  op: string,
+  data: any,
+  parsed: PayloadObject,
+  reference: string,
+  type: PayloadType,
+  timestamp: number
+}
+
+export interface MessagePayloadManager extends PayloadManagerBase {
+  reply(data: any): void;
+  onResponse(callback: (payload: MessagePayloadManager) => void): void;
+}
+
+export interface AssertedPayloadManager extends PayloadManagerBase {}
+
+export interface EventPayloadManager extends PayloadManagerBase {}
+
 export interface RawPayloadMeta {
-  
+  type: PayloadType;
+  timestamp: number;
+}
+
+export interface CreateRawPayloadOpts {
+  type: PayloadType;
 }
 
 export interface PayloadObject {

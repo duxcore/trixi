@@ -7,6 +7,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@types/node": "^15.12.2",
+    "tiny-typed-emitter": "^2.0.3",
     "uuid": "^8.3.2",
     "websocket": "^1.0.34"
   },
