@@ -20,8 +20,8 @@ export interface SocketConnectionObject {
   on(op: string, event: ClientEventCallback): void;
   emit(op: string, payload: any): void;
 
-  send(payload: any): void;
-  assert(payload: any): void;
+  send(payload: any): Promise<MessagePayloadManager>;
+  assert(payload: any): Promise<AssertedPayloadManager>;
 
   onMessage(event: ClientMessageCallback): void;
   onAssert(event: ClientAssertCallback): void;

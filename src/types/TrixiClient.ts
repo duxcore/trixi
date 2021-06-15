@@ -1,5 +1,5 @@
 import { ClientAssertCallback, ClientEventCallback, ClientMessageCallback } from "./Connection";
-import { MessagePayloadManager } from "./Payload";
+import { AssertedPayloadManager, MessagePayloadManager } from "./Payload";
 
 export interface TrixiClient {
   readonly url: string;
@@ -7,7 +7,7 @@ export interface TrixiClient {
   emit(op: string, payload: any): void;
 
   send(payload: any): Promise<MessagePayloadManager>;
-  assert(payload: any): void;
+  assert(payload: any): Promise<AssertedPayloadManager>;
 
   onMessage(event: ClientMessageCallback): void;
   onAssert(event: ClientAssertCallback): void;

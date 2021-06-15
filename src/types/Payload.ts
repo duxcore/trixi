@@ -11,12 +11,12 @@ export enum PayloadType {
 }
 
 interface PayloadManagerBase {
-  op: string,
-  data: any,
-  parsed: PayloadObject,
-  reference: string,
-  type: PayloadType,
-  timestamp: number
+  readonly op: string,
+  readonly data: any,
+  readonly parsed: PayloadObject,
+  readonly reference: string,
+  readonly type: PayloadType,
+  readonly timestamp: number
 }
 
 export interface MessagePayloadManager extends PayloadManagerBase {
