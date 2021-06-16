@@ -2,10 +2,13 @@
   <h1>
     Trixi WebSocket Wrapper
     <br />
-      <a href="https://discord.gg/dTGJ5Bchnq">
+  <a href="https://discord.gg/dTGJ5Bchnq">
     <img src="https://img.shields.io/discord/844279877503025182?label=Discord&logo=discord&logoColor=white&style=for-the-badge" />
   </a>
-    <img src="https://img.shields.io/github/license/duxcore/trixi?style=for-the-badge" />
+  <a href="https://www.npmjs.com/package/trixi">
+    <img src="https://img.shields.io/npm/dw/trixi?logo=npm&style=for-the-badge" />
+    <img src="https://img.shields.io/npm/v/trixi/latest?label=Latest%20Version&style=for-the-badge" />
+  </a>
   </h1>
 </span>
 
