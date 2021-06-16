@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "lib/index.js",
   "repository": "https://github.com/duxcore/trixi.git",
+  "private": false,
   "license": "GPL-3.0",
   "scripts": {
     "build": "tsc",
