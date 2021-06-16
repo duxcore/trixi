@@ -1,7 +1,7 @@
 {
   "name": "trixi",
   "author": "Jackson Roberts <jackson@holopanio.com>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "repository": "https://github.com/duxcore/trixi.git",
   "private": false,
@@ -20,5 +20,12 @@
   "devDependencies": {
     "@types/uuid": "^8.3.0",
     "@types/websocket": "^1.0.2"
-  }
+  },
+  "keywords": [
+    "websocket",
+    "websockets",
+    "trixi",
+    "duxcore",
+    "operators"
+  ]
 }
