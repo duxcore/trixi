@@ -1,26 +1,38 @@
-import { client as WebSocketClient, connection } from "websocket";
+import { connection, w3cwebsocket } from "websocket";
 import createPayload from "../helpers/createPayload";
 import createRawPayload from "../helpers/createRawPayload";
 import { assertedPayloadManager, messagePayloadManager } from "../helpers/payloadManagers";
 import { ClientAssertCallback, ClientMessageCallback } from "../types/Connection";
-import { AssertedPayloadManager, PayloadType, RawPayloadObject } from "../types/Payload";
+import { PayloadType, RawPayloadObject } from "../types/Payload";
 import { TrixiClient, TrixiClientOptions } from "../types/TrixiClient";
 
 export default function trixiClient({
   url
 }: TrixiClientOptions): TrixiClient {
-  const ws = new WebSocketClient();
+  const ws = new w3cwebsocket(url, 'echo-protocol', "trixi:client");
+
+  const wscon = ((): Promise<connection> => {
+    return new Promise(r => {
+      const interval = setInterval(() => {
+        if (!ws._connection) return;
+
+        r(ws._connection);
+        return clearInterval(interval)
+      }, 10)
+    });
+  })
+
   let assertionEventCallbacks: ClientAssertCallback[] = [];
   let messageEventCallbacks: ClientMessageCallback[] = [];
 
-  ws.connect(url, "echo-protocol", "trixi:client");
-  ws.on('connectFailed', err => { throw err; })
+  ws.onerror = err => { throw err; }
 
-  const getConnection: Promise<connection> = new Promise(r => ws.on('connect', r));
+  const getConnection: Promise<connection> = new Promise(r => wscon().then(() => r(ws._connection as connection)));
 
-  ws.on("connect", connection => {
-    connection.on("message", data => {
-      const json: RawPayloadObject = JSON.parse(data.utf8Data ?? "");
+  ws.onopen = async () => {
+    const connection = (await ws._connection) as connection
+    ws.onmessage = e => {
+      const json: RawPayloadObject = JSON.parse(e.data.toString());
 
       assertionEventCallbacks.map(cb => {
         const manager = assertedPayloadManager(connection, json);
@@ -30,15 +42,15 @@ export default function trixiClient({
       });
 
       messageEventCallbacks.map(cb => {
-        const json: RawPayloadObject = JSON.parse(data.utf8Data ?? "");
+        const json: RawPayloadObject = JSON.parse(e.data.toString());
         const manager = messagePayloadManager(connection, json);
 
         if (json.meta.type !== PayloadType.Message) return;
 
         return cb(manager);
       })
-    })
-  })
+    }
+  }
 
   return {
     url,

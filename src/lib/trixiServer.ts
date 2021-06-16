@@ -15,14 +15,16 @@ export default function trixiServer({
 
   const newConnection = (connection: connection, request: request) => {
     connectionListeners.map(cL => {
-      const sco = socketConnection({
-        connection,
-        host: request.host,
-        origin: request.origin,
-        remoteAddress: request.remoteAddress
-      });
-
-      cL(sco);
+      setTimeout(() => {
+        const sco = socketConnection({
+          connection,
+          host: request.host,
+          origin: request.origin,
+          remoteAddress: request.remoteAddress
+        });
+  
+        cL(sco);
+      }, 2)
     });
   }
 

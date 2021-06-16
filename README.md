@@ -10,3 +10,4 @@
 </span>
 
 Trixi is a WebSocket wrapper that enables developers to create better and stricter acpplications.  The way we do this is that we use scoped socket interactions which allows you to have a scope for unidirectional payloads, event based payloads, and bidirectional payloads.  All of this is done through the use of a standardized payload schema.
+
