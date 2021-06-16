@@ -4,10 +4,11 @@ export interface RawPayloadObject {
 }
 
 export enum PayloadType {
-  Event = "type:event",
   Message = "type:message",
+  Operator = "type:Operator",
   MessageResponse = "type:message_response",
   AssertedMessage = "type:asserted_message",
+  OperatorResponse = "type:operator_response",
 }
 
 interface PayloadManagerBase {
@@ -26,7 +27,10 @@ export interface MessagePayloadManager extends PayloadManagerBase {
 
 export interface AssertedPayloadManager extends PayloadManagerBase {}
 
-export interface EventPayloadManager extends PayloadManagerBase {}
+export interface OperatorPayloadManager extends PayloadManagerBase {
+  reply(data: any): void;
+  onResponse(callback: (payload: OperatorPayloadManager) => void): void;
+}
 
 export interface RawPayloadMeta {
   type: PayloadType;

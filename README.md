@@ -88,3 +88,39 @@ client.send({ hello: "world" }).then(payload => {
   })
 });
 ```
+
+# Operator Payloads
+Operator payloads are something that you can use to send a payload with a specific operator code attached to it.  Once you send the operator payload, the client can listen for it and if it choose to, it can reply in the same manor as the bidrectional payload.
+```ts
+import trixi from 'trixi';
+import { Server } from 'http';
+
+const httpServer = new Server();
+const app = trixi();
+
+/**
+ * Server Example
+ */
+httpServer.listen(8080, () => {
+  const server = app.createServer({ httpServer });
+
+  server.onConnection(connection => {
+    console.log("A new socket connection has been established from", connection.remoteAddress);
+
+    // When a new connection is established, send the "hello:world" operator.
+    connection.sendOp("hello:world", { greeting: "Hello World" });
+  });
+});
+
+/**
+ * Client Example
+ */
+const client = app.createClient({ url: "ws://localhost:8080" });
+
+// Create a listener on the operator "hello:world"
+client.onOp("hello:world", e => {
+  console.log("New message on 'hello:world':", e.data);
+});
+```
+
+> **NOTE**: You can send a string or a json object as a payload.

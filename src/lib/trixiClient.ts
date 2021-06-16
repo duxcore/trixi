@@ -1,10 +1,11 @@
 import { connection, w3cwebsocket } from "websocket";
 import createPayload from "../helpers/createPayload";
 import createRawPayload from "../helpers/createRawPayload";
-import { assertedPayloadManager, messagePayloadManager } from "../helpers/payloadManagers";
-import { ClientAssertCallback, ClientMessageCallback } from "../types/Connection";
+import { assertedPayloadManager, messagePayloadManager, operatorPayloadManager } from "../helpers/payloadManagers";
+import { ClientAssertCallback, ClientOperatorCallback, ClientMessageCallback } from "../types/Connection";
 import { PayloadType, RawPayloadObject } from "../types/Payload";
 import { TrixiClient, TrixiClientOptions } from "../types/TrixiClient";
+import Collection from '@discordjs/collection';
 
 export default function trixiClient({
   url
@@ -23,7 +24,8 @@ export default function trixiClient({
   })
 
   let assertionEventCallbacks: ClientAssertCallback[] = [];
-  let messageEventCallbacks: ClientMessageCallback[] = [];
+  let payloadEventCallbacks: ClientMessageCallback[] = [];
+  let operatorEventCallbacks = new Collection<string, ClientOperatorCallback>();
 
   ws.onerror = err => { throw err; }
 
@@ -34,6 +36,13 @@ export default function trixiClient({
     ws.onmessage = e => {
       const json: RawPayloadObject = JSON.parse(e.data.toString());
 
+      operatorEventCallbacks.map((cb, operator) => {
+        const manager = operatorPayloadManager(connection, json);
+        if (manager.op !== operator || manager.type !== PayloadType.Operator) return;
+
+        return cb(manager);
+      });
+
       assertionEventCallbacks.map(cb => {
         const manager = assertedPayloadManager(connection, json);
         if (json.meta.type !== PayloadType.AssertedMessage) return;
@@ -41,7 +50,7 @@ export default function trixiClient({
         return cb(manager);
       });
 
-      messageEventCallbacks.map(cb => {
+      payloadEventCallbacks.map(cb => {
         const json: RawPayloadObject = JSON.parse(e.data.toString());
         const manager = messagePayloadManager(connection, json);
 
@@ -54,15 +63,23 @@ export default function trixiClient({
 
   return {
     url,
-    on() {},
-    onAssert(event) {
-      assertionEventCallbacks.push(event);
-    }, 
-    onMessage(event) {
-      messageEventCallbacks.push(event)
-    }, 
+    onOp(operator: string, event) { operatorEventCallbacks.set(operator, event); },
+    onAssert(event) { assertionEventCallbacks.push(event); }, 
+    onPayload(event) { payloadEventCallbacks.push(event); }, 
 
-    emit() {},
+    sendOp(operator: string, args: any) {
+      return new Promise(async (resolve, reject) => {
+        const connection = await getConnection;
+
+        const payload = createRawPayload(createPayload(operator, args), { type: PayloadType.Operator });
+        const payloadString = JSON.stringify(payload, null, 2);
+
+        connection.send(payloadString, err => {
+          if (err) return reject(err);
+          return resolve(messagePayloadManager(connection, payload));
+        });
+      })
+    },
     send(args: any) {
       return new Promise(async (resolve, reject) => {
         const connection = await getConnection;

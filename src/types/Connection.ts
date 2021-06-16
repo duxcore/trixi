@@ -1,7 +1,7 @@
 import { connection } from "websocket";
-import { AssertedPayloadManager, EventPayloadManager, MessagePayloadManager } from "./Payload";
+import { AssertedPayloadManager, OperatorPayloadManager, MessagePayloadManager } from "./Payload";
 
-export type ClientEventCallback = (event: EventPayloadManager) => void;
+export type ClientOperatorCallback = (event: OperatorPayloadManager) => void;
 export type ClientMessageCallback = (event: MessagePayloadManager) => void;
 export type ClientAssertCallback = (event: AssertedPayloadManager) => void;
 
@@ -17,12 +17,12 @@ export interface SocketConnectionObject {
   remoteAddress: string;
   origin: string;
 
-  on(op: string, event: ClientEventCallback): void;
-  emit(op: string, payload: any): void;
+  onOp(op: string, event: ClientOperatorCallback): void;
+  sendOp(op: string, payload: any): void;
 
   send(payload: any): Promise<MessagePayloadManager>;
   assert(payload: any): Promise<AssertedPayloadManager>;
 
-  onMessage(event: ClientMessageCallback): void;
+  onPayload(event: ClientMessageCallback): void;
   onAssert(event: ClientAssertCallback): void;
 }

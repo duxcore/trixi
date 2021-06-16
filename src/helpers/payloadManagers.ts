@@ -1,6 +1,6 @@
 import { connection } from "websocket";
 import { SocketConnectionObject } from "../types/Connection";
-import { AssertedPayloadManager, MessagePayloadManager, PayloadObject, PayloadType, RawPayloadObject } from "../types/Payload";
+import { AssertedPayloadManager, MessagePayloadManager, OperatorPayloadManager, PayloadObject, PayloadType, RawPayloadObject } from "../types/Payload";
 import createRawPayload from "./createRawPayload";
 
 export function messagePayloadManager(connection: connection, {
@@ -54,4 +54,37 @@ export function assertedPayloadManager(connection: connection, {
     timestamp,
     type
   }
-} 
+}
+
+export function operatorPayloadManager(connection: connection, {
+  payload,
+  meta: {
+    timestamp,
+    type
+  }
+}: RawPayloadObject): OperatorPayloadManager {
+
+  return {
+    data: payload.p,
+    op: payload.op,
+    parsed: payload,
+    reference: payload.ref,
+    timestamp,
+    type,
+    reply(data) {
+      const payloadBase = createRawPayload({
+        op: this.op,
+        p: data,
+        ref: this.reference
+      }, { type: PayloadType.OperatorResponse });
+
+      connection.send(JSON.stringify(payloadBase));
+    },
+    onResponse(callback) {
+      connection.on("message", (data) => {
+        const jsonData: RawPayloadObject = JSON.parse(data.utf8Data ?? "");
+        if (jsonData.payload.ref == this.reference && jsonData.meta.type == PayloadType.OperatorResponse) callback(messagePayloadManager(connection, jsonData));
+      })
+    }
+  }
+}
