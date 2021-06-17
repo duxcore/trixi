@@ -27,8 +27,6 @@ export default function trixiClient({
   let payloadEventCallbacks: ClientMessageCallback[] = [];
   let operatorEventCallbacks = new Collection<string, ClientOperatorCallback>();
 
-  ws.onerror = err => { throw err; }
-
   const getConnection: Promise<connection> = new Promise(r => wscon().then(() => r(ws._connection as connection)));
 
   ws.onopen = async () => {
