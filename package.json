@@ -1,7 +1,7 @@
 {
   "name": "trixi",
   "author": "Jackson Roberts <jackson@holopanio.com>",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "lib/index.js",
   "repository": "https://github.com/duxcore/trixi.git",
   "private": false,
@@ -14,7 +14,7 @@
     "@discordjs/collection": "^0.1.6",
     "@types/node": "^15.12.2",
     "tiny-typed-emitter": "^2.0.3",
-    "typescript": "^4.3.4",
+    "typescript": "^4.2.4",
     "uuid": "^8.3.2",
     "websocket": "^1.0.34"
   },
