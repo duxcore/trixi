@@ -1,5 +1,6 @@
 import http from 'http';
 import { request } from 'websocket';
+import TrixiServerError from '../errors/TrixiServerError';
 import { SocketConnectionObject } from './Connection';
 
 export type RequestValidator = (request: request) => boolean;
@@ -12,6 +13,7 @@ export interface TrixiServer {
 
 export interface TrixiServerEvents {
   "connection": (connection: SocketConnectionObject) => void;
+  "error": (error: TrixiServerError) => void;
 }
 
 export interface TrixiServerOptions {
