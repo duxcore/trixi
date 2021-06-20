@@ -3,7 +3,7 @@ import { connection } from "websocket";
 import createPayload from "../helpers/createPayload";
 import createRawPayload from "../helpers/createRawPayload";
 import { assertedPayloadManager, messagePayloadManager, operatorPayloadManager } from "../helpers/payloadManagers";
-import { ClientAssertCallback, ClientMessageCallback, ClientOperatorCallback, SocketConnectionObject, SocketConnectionOptions } from "../types/Connection";
+import { ClientAssertCallback, ClientMessageCallback, ClientOperatorCallback, ConnectionCloseCallback, SocketConnectionObject, SocketConnectionOptions } from "../types/Connection";
 import { PayloadType, RawPayloadObject } from "../types/Payload";
 
 export default function socketConnection({
@@ -16,6 +16,7 @@ export default function socketConnection({
   let assertionEventCallbacks: ClientAssertCallback[] = [];
   let payloadEventCallbacks: ClientMessageCallback[] = [];
   let operatorEventCallbacks = new Collection<string, ClientOperatorCallback>();
+  let connectionCloseEventCallbacks: ConnectionCloseCallback[] = [];
 
   connection.on("message", data => {
     const json: RawPayloadObject = JSON.parse(data.utf8Data ?? "");
@@ -42,6 +43,12 @@ export default function socketConnection({
 
       return cb(manager);
     })
+  });
+
+  connection.on("close", () => {
+    connectionCloseEventCallbacks.map(e => {
+      e();
+    })
   })
 
   return {
@@ -52,6 +59,7 @@ export default function socketConnection({
     onOp(operator: string, event) { operatorEventCallbacks.set(operator, event); },
     onAssert(event) { assertionEventCallbacks.push(event); }, 
     onPayload(event) { payloadEventCallbacks.push(event); }, 
+    onClose(event) { connectionCloseEventCallbacks.push(event) },
 
     sendOp(operator: string, args: any) {
       return new Promise(async (resolve, reject) => {
@@ -85,6 +93,6 @@ export default function socketConnection({
           return resolve(assertedPayloadManager(connection, payload));
         });
       })
-    },
+    }
   };    
 }

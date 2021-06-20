@@ -11,6 +11,8 @@ export interface TrixiClient {
 
   onPayload(event: ClientMessageCallback): void;
   onAssert(event: ClientAssertCallback): void;
+
+  close(): Promise<void>;
 }
 
 export interface TrixiClientOptions {

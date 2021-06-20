@@ -4,6 +4,7 @@ import { AssertedPayloadManager, OperatorPayloadManager, MessagePayloadManager }
 export type ClientOperatorCallback = (event: OperatorPayloadManager) => void;
 export type ClientMessageCallback = (event: MessagePayloadManager) => void;
 export type ClientAssertCallback = (event: AssertedPayloadManager) => void;
+export type ConnectionCloseCallback = () => {}
 
 export interface SocketConnectionOptions {
   connection: connection; // Raw Socket Connection Object
@@ -25,4 +26,6 @@ export interface SocketConnectionObject {
 
   onPayload(event: ClientMessageCallback): void;
   onAssert(event: ClientAssertCallback): void;
+
+  onClose(event: ConnectionCloseCallback): void
 }

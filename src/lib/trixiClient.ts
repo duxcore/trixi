@@ -104,5 +104,13 @@ export default function trixiClient({
         });
       })
     },
+
+    close() {
+      return new Promise(async (resolve, _rej) => {
+        const connection = await getConnection;
+        connection.close();
+        return resolve();
+      });
+    }
   };
 }
