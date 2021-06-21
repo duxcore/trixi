@@ -19,7 +19,7 @@ export interface SocketConnectionObject {
   origin: string;
 
   onOp(op: string, event: ClientOperatorCallback): void;
-  sendOp(op: string, payload: any): void;
+  sendOp(op: string, payload: any): Promise<OperatorPayloadManager>;
 
   send(payload: any): Promise<MessagePayloadManager>;
   assert(payload: any): Promise<AssertedPayloadManager>;

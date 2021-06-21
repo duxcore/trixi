@@ -68,7 +68,7 @@ export default function socketConnection({
 
         connection.send(payloadString, err => {
           if (err) return reject(err);
-          return resolve(messagePayloadManager(connection, payload));
+          return resolve(operatorPayloadManager(connection, payload));
         });
       })
     },
