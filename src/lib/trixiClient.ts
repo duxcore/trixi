@@ -12,11 +12,15 @@ export default function trixiClient({
 }: TrixiClientOptions): TrixiClient {
   const ws = new w3cwebsocket(url, 'echo-protocol', "trixi:client");
 
+  let connected: boolean = false;
+
   const wscon = ((): Promise<connection> => {
     return new Promise(r => {
       const interval = setInterval(() => {
+        if (connected) return r(ws._connection as connection);
         if (!ws._connection) return;
-
+        connected = true;
+        
         r(ws._connection);
         return clearInterval(interval)
       }, 10)
@@ -67,15 +71,12 @@ export default function trixiClient({
 
     sendOp(operator: string, args: any) {
       return new Promise(async (resolve, reject) => {
-        console.log("attempting to send op")
         const connection = await getConnection;
-        console.log("connection established")
 
         const payload = createRawPayload(createPayload(operator, args), { type: PayloadType.Operator });
         const payloadString = JSON.stringify(payload, null, 2);
 
         ws.send(payloadString);
-        console.log("payload sent");
         return resolve(operatorPayloadManager(connection, payload));
       })
     },
