@@ -72,10 +72,8 @@ export default function trixiClient({
         const payload = createRawPayload(createPayload(operator, args), { type: PayloadType.Operator });
         const payloadString = JSON.stringify(payload, null, 2);
 
-        connection.send(payloadString, err => {
-          if (err) return reject(err);
-          return resolve(operatorPayloadManager(connection, payload));
-        });
+        ws.send(payloadString);
+        return resolve(operatorPayloadManager(connection, payload));
       })
     },
     send(args: any) {
