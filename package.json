@@ -1,7 +1,7 @@
 {
   "name": "trixi",
   "author": "Jackson Roberts <jackson@holopanio.com>",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "main": "lib/index.js",
   "repository": "https://github.com/duxcore/trixi.git",
   "private": false,

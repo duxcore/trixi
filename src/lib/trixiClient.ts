@@ -14,24 +14,22 @@ export default function trixiClient({
 
   let connected: boolean = false;
 
-  const wscon = ((): Promise<connection> => {
-    return new Promise(r => {
-      const interval = setInterval(() => {
-        if (connected) return r(ws._connection as connection);
-        if (!ws._connection) return;
-        connected = true;
-        
-        r(ws._connection);
-        return clearInterval(interval)
-      }, 10)
-    });
+  const wscon = ((r: (connection: connection) => void)=> {
+    const interval = setInterval(() => {
+      if (connected) return r(ws._connection as connection);
+      if (!ws._connection) return;
+      connected = true;
+      
+      r(ws._connection);
+      return clearInterval(interval)
+    }, 10)
   })
 
   let assertionEventCallbacks: ClientAssertCallback[] = [];
   let payloadEventCallbacks: ClientMessageCallback[] = [];
   let operatorEventCallbacks = new Collection<string, ClientOperatorCallback>();
 
-  const getConnection: Promise<connection> = new Promise(r => wscon().then(() => r(ws._connection as connection)));
+  const getConnection = ((cb: (connection: connection) => void) => { wscon(connection => cb(connection)) });
 
   ws.onopen = async () => {
     const connection = (await ws._connection) as connection
@@ -70,48 +68,49 @@ export default function trixiClient({
     onPayload(event) { payloadEventCallbacks.push(event); }, 
 
     sendOp(operator: string, args: any) {
-      return new Promise(async (resolve, reject) => {
-        const connection = await getConnection;
-
-        const payload = createRawPayload(createPayload(operator, args), { type: PayloadType.Operator });
-        const payloadString = JSON.stringify(payload, null, 2);
-
-        ws.send(payloadString);
-        return resolve(operatorPayloadManager(connection, payload));
-      })
-    },
-    send(args: any) {
-      return new Promise(async (resolve, reject) => {
-        const connection = await getConnection;
-
-        const payload = createRawPayload(createPayload("trixi:message", args), { type: PayloadType.Message });
-        const payloadString = JSON.stringify(payload, null, 2);
-
-        connection.send(payloadString, err => {
-          if (err) return reject(err);
-          return resolve(messagePayloadManager(connection, payload));
+      return new Promise((resolve, reject) => {
+        getConnection(connection => {
+          const payload = createRawPayload(createPayload(operator, args), { type: PayloadType.Operator });
+          const payloadString = JSON.stringify(payload, null, 2);
+  
+          ws.send(payloadString);
+          return resolve(operatorPayloadManager(connection, payload));
         });
       })
     },
+    send(args: any) {
+      return new Promise((resolve, reject) => {
+        getConnection(connection => {
+          const payload = createRawPayload(createPayload("trixi:message", args), { type: PayloadType.Message });
+          const payloadString = JSON.stringify(payload, null, 2);
+  
+          connection.send(payloadString, err => {
+            if (err) return reject(err);
+            return resolve(messagePayloadManager(connection, payload));
+          });
+        });
+      });
+    },
     assert(args: any) {
-      return new Promise(async (resolve, reject) => {
-        const connection = await getConnection;
-
-        const payload = createRawPayload(createPayload("trixi:assertion", args), { type: PayloadType.AssertedMessage });
-        const payloadString = JSON.stringify(payload, null, 2);
-
-        connection.send(payloadString, err => {
-          if (err) return reject(err);
-          return resolve(assertedPayloadManager(connection, payload));
+      return new Promise((resolve, reject) => {
+        getConnection(connection => {
+          const payload = createRawPayload(createPayload("trixi:assertion", args), { type: PayloadType.AssertedMessage });
+          const payloadString = JSON.stringify(payload, null, 2);
+  
+          connection.send(payloadString, err => {
+            if (err) return reject(err);
+            return resolve(assertedPayloadManager(connection, payload));
+          });
         });
       })
     },
 
     close() {
-      return new Promise(async (resolve, _rej) => {
-        const connection = await getConnection;
-        connection.close();
-        return resolve();
+      return new Promise((resolve, _rej) => {
+        getConnection(connection => {
+          connection.close();
+          return resolve();
+        });
       });
     }
   };
