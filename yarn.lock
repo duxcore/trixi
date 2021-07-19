@@ -114,6 +114,11 @@ node-gyp-build@^4.2.0:
   resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.2.3.tgz#ce6277f853835f718829efb47db20f3e4d9c4739"
   integrity sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==
 
+ps-std@^0.1.0-1:
+  version "0.1.0-1"
+  resolved "https://registry.yarnpkg.com/ps-std/-/ps-std-0.1.0-1.tgz#05a0ff9563b2ec90fae8e6e727fbf670f2989107"
+  integrity sha512-JVgkMucgZqZZU9PBPojgV2WW9kUGv+cJAirNdH2o3+cTGLljLSvBapuP2u1d/KPoKApOFNZ0hpVR5IcpJiPxTw==
+
 tiny-typed-emitter@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/tiny-typed-emitter/-/tiny-typed-emitter-2.0.3.tgz#4335e3a75127ae7faba91b02e91615d97dc8db7d"

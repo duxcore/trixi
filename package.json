@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@discordjs/collection": "^0.2.0",
 		"json-buffer": "^3.0.1",
+		"ps-std": "^0.1.0-1",
 		"tiny-typed-emitter": "^2.0.3",
 		"uncased": "^1.0.0-5",
 		"uuid": "^8.3.2",
