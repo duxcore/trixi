@@ -3,8 +3,6 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { Routes } from '../lib/createServer';
 import {
 	InteractionMethod,
-	InteractionRequest,
-	InteractionResponse,
 	InteractionStack,
 } from '../types/interaction';
 

@@ -52,7 +52,7 @@ export default function createServer(options: CreateServerOptions, started?: () 
 
 		const connection = request.accept('echo-protocol', request.origin);
 		connection.on('message', (msg) => {
-			const interaction = handleWebSocketMessage(msg);
+			const interaction = handleWebSocketMessage(msg, routes);
 		});
 	});
 
