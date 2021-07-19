@@ -1,10 +1,8 @@
 import JSONB from 'json-buffer';
 import { IncomingMessage, ServerResponse } from 'http';
 import { Routes } from '../lib/createServer';
-import {
-	InteractionMethod,
-	InteractionStack,
-} from '../types/interaction';
+import parseURL from '../lib/parseURL';
+import { InteractionMethod, InteractionStack } from '../types/interaction';
 
 // import this from somewhere or something idk
 function rejectInvalidRoute(
@@ -28,7 +26,7 @@ export default function handleHttpRequest(routes: Routes) {
 
 		const header_pairs: [string, string][] = [];
 
-		for (let i=0; i < req.rawHeaders.length; i += 2) {
+		for (let i = 0; i < req.rawHeaders.length; i += 2) {
 			header_pairs.push([`${req.rawHeaders[i]}`, `${req.rawHeaders[i + 1]}`]);
 		}
 
@@ -58,34 +56,7 @@ export default function handleHttpRequest(routes: Routes) {
 			}
 		}
 
-		let pqs = uri.replace(/[^a-z0-9\$\–\_\.\+\!\*\(\)\,\?\&\=\/\%]/gi, '');
-		let [ps, qs] = [...pqs.split(/\?/), ''];
-
-		let parts = ps.split(/[\\\/]/gi).filter((a) => a);
-		let qparts = qs.split(/[\&]/g);
-
-		var query: {
-			[k: string]: string | string[];
-		} = {};
-
-		if (qs) {
-			let qa: {
-				[k: string]: string[];
-			} = {};
-
-			for (const qp of qparts) {
-				const [k, v] = [...qp.split('='), ''];
-				qa[k] ? qa[k].push(v) : (qa[k] = [v]);
-			}
-
-			for (const [k, v] of Object.entries(qa)) {
-				if (v.length > 1) {
-					query[k] = v;
-				} else {
-					query[k] = v[0];
-				}
-			}
-		}
+		const { parts, query } = parseURL(uri);
 
 		let params: {
 			[key: string]: string;

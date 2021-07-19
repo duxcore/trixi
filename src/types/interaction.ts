@@ -15,7 +15,7 @@ export interface InteractionRequest {
     [name: string]: string | string[];
   }
   query: {
-    [name: string]: string | string[];
+    [name: string]: string[];
   }
   params: {
     [name: string]: string | string[];
