@@ -1,10 +1,3 @@
-import trixiClient from "./lib/trixiClient";
-import trixiServer from "./lib/trixiServer";
-import { Trixi } from "./types/Trixi";
+import createServer from './lib/createServer';
 
-export default function trixi(): Trixi {
-  return {
-    createServer: trixiServer,
-    createClient: trixiClient
-  }; 
-}
+export { createServer };

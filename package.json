@@ -1,32 +1,34 @@
 {
-  "name": "trixi",
-  "author": "Jackson Roberts <jackson@holopanio.com>",
-  "version": "1.1.3",
-  "main": "lib/index.js",
-  "repository": "https://github.com/duxcore/trixi.git",
-  "private": false,
-  "license": "GPL-3.0",
-  "scripts": {
-    "build": "tsc",
-    "postinstall": "tsc"
-  },
-  "dependencies": {
-    "@discordjs/collection": "^0.1.6",
-    "@types/node": "^15.12.2",
-    "tiny-typed-emitter": "^2.0.3",
-    "typescript": "^4.2.4",
-    "uuid": "^8.3.2",
-    "websocket": "^1.0.34"
-  },
-  "devDependencies": {
-    "@types/uuid": "^8.3.0",
-    "@types/websocket": "^1.0.2"
-  },
-  "keywords": [
-    "websocket",
-    "websockets",
-    "trixi",
-    "duxcore",
-    "operators"
-  ]
+	"name": "trixi",
+	"author": "Jackson Roberts <jackson@holopanio.com>",
+	"version": "1.1.3",
+	"main": "lib/index.js",
+	"repository": "https://github.com/duxcore/trixi.git",
+	"private": false,
+	"license": "GPL-3.0-or-later",
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {
+		"@discordjs/collection": "^0.2.0",
+		"json-buffer": "^3.0.1",
+		"tiny-typed-emitter": "^2.0.3",
+		"uncased": "^1.0.0-5",
+		"uuid": "^8.3.2",
+		"websocket": "^1.0.34"
+	},
+	"devDependencies": {
+		"@types/json-buffer": "^3.0.0",
+		"@types/node": "^14",
+		"@types/uuid": "^8.3.0",
+		"@types/websocket": "^1.0.3",
+		"typescript": "^4.3.5"
+	},
+	"keywords": [
+		"websocket",
+		"websockets",
+		"trixi",
+		"duxcore",
+		"operators"
+	]
 }
