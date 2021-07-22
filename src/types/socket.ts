@@ -1,10 +1,11 @@
 export interface RawSocketObject {
   uri: string;
+  status?: number;
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-	payload?: any | null;
+	data?: any | null;
 	headers: {
 		[name: string]: string;
 	};
-	operator: string;
+	operator?: string;
 	reference: string;
 }

@@ -43,7 +43,7 @@ export default function createServer(options: CreateServerOptions, started?: () 
 	};
 
 	ws.on('request', (request) => {
-		if (isOriginAllowed(request.origin))
+		if (!isOriginAllowed(request.origin))
 			return request.reject(401, 'Request denied');
 
 		const connection = request.accept('echo-protocol', request.origin);

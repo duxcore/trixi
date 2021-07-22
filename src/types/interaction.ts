@@ -1,5 +1,3 @@
-import { ApiResponse } from "./api";
-
 export type InteractionMethod = (req: InteractionRequest, res: InteractionResponse) => void;
 export type InteractionMiddlewareMethod = (req: InteractionRequest, res: InteractionResponse, next: () => void) => void;
 

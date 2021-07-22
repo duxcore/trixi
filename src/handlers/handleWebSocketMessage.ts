@@ -15,18 +15,19 @@ function sendError( message: string, code: string, method: string, route: string
   const reference = msg.reference;
   const responseObject = {
     error: {
-      message: `Cannot ${method.toUpperCase()} /${route.join('/')}`,
-      code: "INVALID_ROUTE"
+      message,
+      code
     }
   }
   
   sendWsObject(connection, {
     headers: {},
+    status: 400,
     method: msg.method,
-    operator: `ERROR_${msg.operator}`,
+    operator: `ERROR_${msg.uri}`,
     reference: reference ?? uuid.v4(),
     uri: msg.uri,
-    payload: responseObject
+    data: responseObject
   }) 
 }
 
@@ -93,11 +94,12 @@ export function handleWebSocketMessage(connection: connection, msg: IMessage, ro
         respond: (status: number, data: object) => {
           const responseObject: RawSocketObject = {
             uri,
+            status,
             operator: `REPLY_${uri}`,
             headers: responseHeaders,
             method: req.method,
             reference: req.reference ?? uuid.v4(),
-            payload: data
+            data: data
           }
         },
         setHeader: (header: string, value: string) => {
