@@ -1,10 +1,6 @@
-import Collection from '@discordjs/collection';
-import { IncomingMessage, ServerResponse } from 'http';
-import { server as WebSocketServer } from 'websocket';
 import handleHttpRequest from '../handlers/handleHttpRequest';
 import { handleWebSocketMessage } from '../handlers/handleWebSocketMessage';
-import { ApiResponse } from '../types/api';
-import { InteractionMethod, InteractionMiddlewareMethod, InteractionStack } from '../types/interaction';
+import { InteractionStack } from '../types/interaction';
 import createHttpServer from './createHttpServer';
 import {TypedEmitter} from 'tiny-typed-emitter';
 import TrixiEvents from '../types/events';
@@ -52,7 +48,7 @@ export default function createServer(options: CreateServerOptions, started?: () 
 
 		const connection = request.accept('echo-protocol', request.origin);
 		connection.on('message', (msg) => {
-			const interaction = handleWebSocketMessage(msg, routes);
+			const interaction = handleWebSocketMessage(connection, msg, routes);
 		});
 	});
 
@@ -85,24 +81,4 @@ export default function createServer(options: CreateServerOptions, started?: () 
 export interface CreateServerOptions {
 	port: number | number[];
 	ignorePortBindingError?: boolean;
-}
- 
-type foo = [ ...string[], boolean ];
-
-const bar: foo = [
-	false,
-]
-/**
- * input: /v1/user/70
- * 
- * route: /v1/user/:id
- * 
- * 
- * 
- * trixi.listen('a/b/:c', ...middleware(if any), (req, res) => {})
- * 
- */
-
-const test = {
-	
 }

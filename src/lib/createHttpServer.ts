@@ -1,4 +1,4 @@
-import http, { Server } from 'http';
+import http from 'http';
 import { server as WebSocketServer } from 'websocket';
 import { CreateServerOptions } from './createServer';
 

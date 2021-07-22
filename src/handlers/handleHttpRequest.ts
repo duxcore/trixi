@@ -145,28 +145,3 @@ export default function handleHttpRequest(routes: Routes) {
 		}
 	};
 }
-/**
-
-import { ApiResponse } from "./api";
-
-export type InteractionMethod = (req: InteractionRequest, res: InteractionResponse) => void;
-
-export interface InteractionRequest {
-  uri: string;
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
-  headers: {
-    [name: string]: string | string[];
-  }
-  query: {
-    [name: string]: string | string[];
-  }
-  params: {
-    [name: string]: string | string[];
-  }
-}
-export interface InteractionResponse {
-  respond(status: number, data: ApiResponse);
-}
-
-
-*/
