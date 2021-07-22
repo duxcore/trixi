@@ -1,4 +1,3 @@
-import WebSocket from 'isomorphic-ws';
 import { Eventra } from '@duxcore/eventra'
 import { ClientOptions } from '../types/client';
 import { RawSocketObject } from '../types/socket';
