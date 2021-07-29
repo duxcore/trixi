@@ -12,7 +12,7 @@
   </h1>
 </span>
 
-Trixi is a WebSocket wrapper that enables developers to create better and stricter acpplications.  The way we do this is that we use scoped socket interactions which allows you to have a scope for unidirectional payloads, operator based payloads, and bidirectional payloads.  All of this is done through the use of a standardized payload schema.
+Trixi is a WebSocket wrapper that enables developers to create better and stricter applications.  The way we do this is that we use scoped socket interactions which allows you to have a scope for unidirectional payloads, operator based payloads, and bidirectional payloads.  All of this is done through the use of a standardized payload schema.
 
 # Unidirectional Payloads
 If you need to send a payload with out the possibility of a response, then you can send a unidirectional payload, otherwise knon as an assertion.  Both the client and server can send an assertion to each other, once the assertion is sent, it cannot be replied to in any way.
